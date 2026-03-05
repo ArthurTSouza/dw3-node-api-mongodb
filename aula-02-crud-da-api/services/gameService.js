@@ -31,6 +31,29 @@ class gameService {
       console.log(error);
     }
   }
+  //Exlcuir Game
+  async Delete(id){
+    try{
+      await Game.findByIdAndDelete(id) //Método do Mongoose que seleciona o game e o deleta, ambos de uma só vez
+      console.log(`Game com a id: ${id} foi deletado`)
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+  async Update(id,title,year,platform,price){
+    try{
+      await Game.findByIdAndUpdate(id,{
+        title,
+        year,
+        platform,
+        price
+      })
+      console.log(`O jogo com a id ${id} foi alterado.`)
+    }catch(error){
+      console.log(error)
+    }
+  }
 }
 
 

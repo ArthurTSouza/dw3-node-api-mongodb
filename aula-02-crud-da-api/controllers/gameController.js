@@ -1,4 +1,5 @@
 import gameService from "../services/gameService.js";
+import { ObjectId } from 'mongodb'
 
 //Função para tratar a requisição de listar os jogos
 const getAllGames = async (req, res) => {
@@ -25,4 +26,38 @@ const createGame = async (req, res) => {
   }
 };
 
-export default { getAllGames, createGame };
+//Função para deletar um jogo
+const deleteGame= async(req,res)=>{
+  try{
+    //Coletando a id
+    const id=req.params.id;
+    //Validação do id 
+    if(ObjectId.isValid(id)){
+    await gameService.Delete(id)
+    res.status(204).json({ message: "Jogo excluído com sucesso." });
+  }else{
+    res.status(400).json({ error: "Id inválido." });
+  }
+}catch(error){
+  console.log(error)
+  res.status(500).json({ error: "Erro interno do servidor." });
+}
+}
+
+const updateGame = async(req,res)=>{
+  try{
+    const id= req.params.id;
+    if(ObjectId.isValid(id)){
+      const {title,year,platform,price} = req.body;
+      await gameService.Update(id,title,year,platform,price);
+      res.status(200).json({message: "Jogo atualizado com sucesso!"})
+    } else{
+      res.status(400).json({ error: "Ocorreu um erro na validação da Id." });
+    }
+  }catch(error){
+    console.log(error)
+    res.status(500).json({ error: "Erro interno do servidor." });
+  }
+}
+
+export default { getAllGames, createGame, deleteGame, updateGame};

@@ -7,5 +7,9 @@ const gameRoutes = express.Router();
 gameRoutes.get("/games", gameController.getAllGames);
 //Endpoint para cadastrar um Game
 gameRoutes.post("/games", gameController.createGame);
+//Endpoint para deletar um game
+gameRoutes.delete("/games/:id", gameController.deleteGame);
+//Endpoint para editar um game
+gameRoutes.put("/games/:id", gameController.updateGame);
 
 export default gameRoutes;
