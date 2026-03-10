@@ -49,8 +49,8 @@ const updateGame = async(req,res)=>{
     const id= req.params.id;
     if(ObjectId.isValid(id)){
       const {title,year,platform,price} = req.body;
-      await gameService.Update(id,title,year,platform,price);
-      res.status(200).json({message: "Jogo atualizado com sucesso!"})
+      const game= await gameService.Update(id,title,year,platform,price);
+      res.status(200).json({message: "Jogo atualizado com sucesso!",game:game})
     } else{
       res.status(400).json({ error: "Ocorreu um erro na validação da Id." });
     }
@@ -60,4 +60,23 @@ const updateGame = async(req,res)=>{
   }
 }
 
-export default { getAllGames, createGame, deleteGame, updateGame};
+const getOneGame = async(req,res)=>{
+  try{
+    const id = req.params.id;
+    if(ObjectId.isValid(id)){
+      const game= await gameService.getOne(id)
+      if(!game){
+        res.status(404).json({message: 'O jogo buscado não foi encontrado'})
+      }else{
+        res.status(200).json({game})
+      }
+    }else{
+      res.status(400).json({error: 'A id informada é inválida.'})
+    }
+  }catch(error){
+    console.log(error)
+    res.status(500).json({error: 'Erro interno do sevidor'})
+  }
+}
+
+export default { getAllGames, createGame, deleteGame, updateGame, getOneGame};

@@ -43,13 +43,24 @@ class gameService {
 
   async Update(id,title,year,platform,price){
     try{
-      await Game.findByIdAndUpdate(id,{
+      const updatedGame= await Game.findByIdAndUpdate(id,{
         title,
         year,
         platform,
         price
-      })
+      },{new:true}//Retorna o objeto anterior
+      )
       console.log(`O jogo com a id ${id} foi alterado.`)
+      return updatedGame;
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+  async getOne(id){
+    try{
+      const game= await Game.findOne({_id:id})
+      return game
     }catch(error){
       console.log(error)
     }
